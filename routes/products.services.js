@@ -11,6 +11,7 @@ global.con = mysql.createConnection({
    database: "computerapp"
 });
 
+<<<<<<< HEAD
 // GET ALL PRODUCTS (FIXED)
 router.get('/products', (req, res) => {
   const query = 'SELECT * FROM products WHERE is_deleted = FALSE';
@@ -22,6 +23,18 @@ router.get('/products', (req, res) => {
     res.json(results);
     console.log("Fetched all products:", results.length);
   });
+=======
+
+router.post('/products',(req,res)=>{
+console.log("Post Request Received");
+con.query("INSERT INTO products (`name`,`price`,`stock`,`status`) VALUES (?,?,?,?)",
+[req.body.name,req.body.price,req.body.stock,req.body.status], function (err, result,fields) {
+     if (err) throw err;
+     res.json({"Status":"OK", "Message": "Record Added Successfully with Id "+
+     result.insertId});
+     console.log("Record Added"+ result.insertId);
+});
+>>>>>>> ad8c9cf3fc5402d2398cd32f49047a7f8b133562
 });
 
 // GET SINGLE PRODUCT
@@ -75,12 +88,24 @@ router.delete('/products', (req, res) => {
 router.put('/products',(req,res)=>{
     console.log("PUT Request Received");
     var product_id= req.query.product_id;
+<<<<<<< HEAD
     con.query("UPDATE products SET `name`= ?, `price` = ? , `stock` = ? , `status` = ? WHERE product_id = " + product_id ,
     [req.body.name,req.body.price,req.body.stock,req.body.status], function (err, result, fields) {
+=======
+    con.query("UPDATE products SET `name`= ?, `price` = ? , `stock` = ?, `status` = ? WHERE product_id = " + product_id ,
+    [req.body.name,req.body.price,req.body.stock], function (err, result, fields) {
+>>>>>>> ad8c9cf3fc5402d2398cd32f49047a7f8b133562
        if (err) throw err;
        res.json({"Status":"OK", "Message": "Record Id ["+ product_id + "] is Updated Successfully"});
        console.log("Record Id ["+ product_id+ "] is Updated Successfully");
    });
 });
 
+<<<<<<< HEAD
 module.exports = router;
+=======
+
+
+
+module.exports = router;
+>>>>>>> ad8c9cf3fc5402d2398cd32f49047a7f8b133562

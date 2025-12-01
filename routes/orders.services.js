@@ -14,8 +14,8 @@ global.con = mysql.createConnection({
 
 router.post('/orders',(req,res)=>{
 console.log("Post Request Received");
-con.query("INSERT INTO orders (`user_id`,`quantity`,`total_price`) VALUES (?,?,?)",
-[req.body.user_id,req.body.quantity,req.body.total_price], function (err, result,fields) {
+con.query("INSERT INTO orders (`user_id`,`order_date`,`total_price`) VALUES (?,?,?,?)",
+[req.body.user_id,req.body.order_date,req.body.total_price], function (err, result,fields) {
      if (err) throw err;
      res.json({"Status":"OK", "Message": "Record Added Successfully with Id "+
      result.insertId});
@@ -58,7 +58,7 @@ router.delete('/orders',(req,res)=>{
 router.put('/orders',(req,res)=>{
     console.log("PUT Request Received");
     var order_id= req.query.order_id;
-    con.query("UPDATE orders SET `user_id` = ?  ,`quantity` = ?  ,`total_price` = ?   WHERE order_id = " + order_id ,
+    con.query("UPDATE orders SET `user_id` = ?  ,`order_date` = ?  ,`total_price` = ?   WHERE order_id = " + order_id ,
     [req.body.user_id,req.body.quantity,req.body.total_price], function (err, result, fields) {
        if (err) throw err;
        res.json({"Status":"OK", "Message": "Record Id ["+ order_id + "] is Updated Successfully"});
