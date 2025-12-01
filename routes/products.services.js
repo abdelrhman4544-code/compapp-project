@@ -11,31 +11,20 @@ global.con = mysql.createConnection({
    database: "computerapp"
 });
 
-
-router.post('/products',(req,res)=>{
-console.log("Post Request Received");
-con.query("INSERT INTO products (`name`,`price`,`stock`,`status`) VALUES (?,?,?,?)",
-[req.body.name,req.body.price,req.body.stock,req.body.status], function (err, result,fields) {
-     if (err) throw err;
-     res.json({"Status":"OK", "Message": "Record Added Successfully with Id "+
-     result.insertId});
-     console.log("Record Added"+ result.insertId);
-});
-});
-
-
-
-app.get('/api/products', (req, res) => {
-  const query = 'SELECT * FROM products';
+// GET ALL PRODUCTS (FIXED)
+router.get('/products', (req, res) => {
+  const query = 'SELECT * FROM products WHERE is_deleted = FALSE';
   
-  connection.query(query, (error, results) => {
+  con.query(query, (error, results) => {
     if (error) {
       return res.status(500).json({ error: error.message });
     }
     res.json(results);
+    console.log("Fetched all products:", results.length);
   });
 });
 
+// GET SINGLE PRODUCT
 router.get('/products', (req, res) => {
    var product_id = req.query.product_id;
 
@@ -53,6 +42,19 @@ router.get('/products', (req, res) => {
    });
 });
 
+// CREATE PRODUCT
+router.post('/products',(req,res)=>{
+   console.log("Post Request Received");
+   con.query("INSERT INTO products (`name`,`price`,`stock`,`status`) VALUES (?,?,?,?)",
+   [req.body.name,req.body.price,req.body.stock,req.body.status], function (err, result,fields) {
+      if (err) throw err;
+      res.json({"Status":"OK", "Message": "Record Added Successfully with Id "+
+      result.insertId});
+      console.log("Record Added"+ result.insertId);
+   });
+});
+
+// DELETE PRODUCT (SOFT DELETE)
 router.delete('/products', (req, res) => {
    var product_id = req.query.product_id;
    con.query(
@@ -69,7 +71,7 @@ router.delete('/products', (req, res) => {
    );
 });
 
-
+// UPDATE PRODUCT
 router.put('/products',(req,res)=>{
     console.log("PUT Request Received");
     var product_id= req.query.product_id;
@@ -80,8 +82,5 @@ router.put('/products',(req,res)=>{
        console.log("Record Id ["+ product_id+ "] is Updated Successfully");
    });
 });
-
-
-
 
 module.exports = router;
