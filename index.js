@@ -26,8 +26,11 @@ app.use("/api", suppliersRoutes);
 const contact_usRoutes = require("./routes/contact_us.services");
 app.use("/api", contact_usRoutes);
 
-const product_suppliersRoutes = require("./routes/product_suppliers.services");
-app.use("/api", product_suppliersRoutes);
+const cartRoutes = require("./routes/cart.services");
+app.use("/api", cartRoutes);
+
+const cart_itemsRoutes = require("./routes/cart_items.services");
+app.use("/api", cart_itemsRoutes);
 
 
 
