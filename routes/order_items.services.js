@@ -11,7 +11,7 @@ global.con = mysql.createConnection({
    database: "computerapp"
 });
 
-// CREATE — POST
+
 router.post('/order_items', (req, res) => {
   console.log("Post Request Received");
   con.query(
