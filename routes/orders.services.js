@@ -14,7 +14,7 @@ global.con = mysql.createConnection({
 
 router.post('/orders',(req,res)=>{
 console.log("Post Request Received");
-con.query("INSERT INTO orders (`user_id`,`order_date`,`total_price`) VALUES (?,?,?,?)",
+con.query("INSERT INTO orders (`user_id`,`order_date`,`total_price`) VALUES (?,?,?)",
 [req.body.user_id,req.body.order_date,req.body.total_price], function (err, result,fields) {
      if (err) throw err;
      res.json({"Status":"OK", "Message": "Record Added Successfully with Id "+
