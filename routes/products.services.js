@@ -14,8 +14,8 @@ global.con = mysql.createConnection({
 
 router.post('/products',(req,res)=>{
 console.log("Post Request Received");
-con.query("INSERT INTO products (`name`,`price`,`stock`) VALUES (?,?,?)",
-[req.body.name,req.body.price,req.body.stock], function (err, result,fields) {
+con.query("INSERT INTO products (`name`,`price`,`stock`,`status`) VALUES (?,?,?,?)",
+[req.body.name,req.body.price,req.body.stock,req.body.status], function (err, result,fields) {
      if (err) throw err;
      res.json({"Status":"OK", "Message": "Record Added Successfully with Id "+
      result.insertId});
@@ -62,7 +62,7 @@ router.delete('/products', (req, res) => {
 router.put('/products',(req,res)=>{
     console.log("PUT Request Received");
     var product_id= req.query.product_id;
-    con.query("UPDATE products SET `name`= ?, `price` = ? , `stock` = ? WHERE product_id = " + product_id ,
+    con.query("UPDATE products SET `name`= ?, `price` = ? , `stock` = ?, `status` = ? WHERE product_id = " + product_id ,
     [req.body.name,req.body.price,req.body.stock], function (err, result, fields) {
        if (err) throw err;
        res.json({"Status":"OK", "Message": "Record Id ["+ product_id + "] is Updated Successfully"});
