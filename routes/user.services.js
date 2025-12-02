@@ -89,20 +89,65 @@ console.log(result);
     console.log (`Incoming search Request`);
 });
 
+// ==========================================
+// 1. REGISTER API (POST)
+// Matches React: axios.post('/api/register', ...)
+// ==========================================
+router.post('/register', (req, res) => {
+    console.log("Register Request Received");
+    
+    // Note: React sends 'username', but your DB column is 'name'. I mapped them here.
+    const name = req.body.username || req.body.name; 
+    const email = req.body.email;
+    const password = req.body.password;
 
-router.get('/login',(req,res)=>{
-   con.query("SELECT * FROM user where email = ? and password= ?",
-   [req.query.email, req.query.password], function (err, result, fields) {
-   if (err) {res.json({"Status": "Error","Message": err});}
-   else{
-   if (result.length == 0){
-      res.json({"Status": "Error","Message": "Authentication Failed, Check email or password ...!!!"}); console.log(result);}
-   else{
-       res.json({"Status": "OK","Message": "Loged In Successfully"});
-       console.log(result);}}
+    con.query("INSERT INTO user (`name`, `email`,`password`) VALUES (?,?,?)",
+        [name, email, password], 
+        function (err, result, fields) {
+            if (err) {
+                res.status(500).json({ "Status": "Error", "Message": err });
+            } else {
+                res.json({ 
+                    "Status": "OK", 
+                    "Message": "User Registered Successfully",
+                    "insertId": result.insertId 
+                });
+                console.log("User Registered ID: " + result.insertId);
+            }
+        }
+    );
 });
-       console.log (`Incoming login Request`);
+
+// ==========================================
+// 2. LOGIN API (POST)
+// Matches React: axios.post('/api/login', ...)
+// ==========================================
+// CHANGED FROM GET TO POST (Security Best Practice)
+router.post('/login', (req, res) => {
+    const email = req.body.email;       // Changed from req.query to req.body
+    const password = req.body.password; // Changed from req.query to req.body
+
+    con.query("SELECT * FROM user where email = ? and password= ?",
+        [email, password], 
+        function (err, result, fields) {
+            if (err) {
+                res.json({ "Status": "Error", "Message": err });
+            } else {
+                if (result.length == 0) {
+                    // 401 means Unauthorized
+                    res.status(401).json({ "Status": "Error", "Message": "Wrong email or password" });
+                    console.log("Login Failed for: " + email);
+                } else {
+                    // Send back the user data (result[0]) so React knows who logged in
+                    res.json(result[0]); 
+                    console.log("Logged In: " + email);
+                }
+            }
+        }
+    );
+    console.log(`Incoming login Request`);
 });
+
 
 
 module.exports = router;

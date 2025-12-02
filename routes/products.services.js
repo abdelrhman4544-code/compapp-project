@@ -30,7 +30,7 @@ router.get('/products', (req, res) => {
 // ---------------------
 // GET PRODUCT BY ID
 // ---------------------
-router.get('/product', (req, res) => {
+router.get('/products', (req, res) => {
    const product_id = req.query.product_id;
 
    const query = "SELECT * FROM products WHERE product_id = ? AND is_deleted = FALSE";
