@@ -1,6 +1,9 @@
 const express = require ('express');
 const app = express();
+const cors = require('cors'); // <--- 1. Add this line at the top
 app.use(express.json());
+
+app.use(cors()); // <--- 2. Add this line RIGHT HERE (Before your routes)
 
 const userRoute =require('./routes/user.services')
 app.use('/api',userRoute);
