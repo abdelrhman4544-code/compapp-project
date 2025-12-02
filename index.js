@@ -1,10 +1,19 @@
-const express = require ('express');
+const express = require('express');
+const cors = require('cors'); // Ensure you have installed this: npm install cors
 const app = express();
-const cors = require('cors'); // <--- 1. Add this line at the top
+
+// 1. ALLOW REACT TO TALK TO BACKEND
+app.use(cors());
 app.use(express.json());
 
-app.use(cors()); // <--- 2. Add this line RIGHT HERE (Before your routes)
 
+
+// 4. START SERVER
+app.listen(8080, () => {
+    console.log('Backend is running on Port 8080');
+    console.log('Register Route: http://localhost:8080/api/user');
+    console.log('Login Route:    http://localhost:8080/api/login');
+});
 const userRoute =require('./routes/user.services')
 app.use('/api',userRoute);
 
@@ -37,7 +46,3 @@ app.use("/api", cart_itemsRoutes);
 
 
 
-const PORT = 8080
-app.listen(PORT,
-()=> console.log (`your server is up and run on http://localhost:${PORT}`)
-);
